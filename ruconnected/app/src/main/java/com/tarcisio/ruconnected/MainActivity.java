@@ -15,6 +15,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.tarcisio.ruconnected.Banco_de_Dados.DatabaseClient;
+import com.tarcisio.ruconnected.DAO.ComidaDAO;
+import com.tarcisio.ruconnected.DAO.FeedBackDAO;
+import com.tarcisio.ruconnected.DAO.UsuarioDAO;
+import com.tarcisio.ruconnected.Model.Comida;
+import com.tarcisio.ruconnected.Model.FeedBack;
+import com.tarcisio.ruconnected.Model.Usuario;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -22,12 +29,41 @@ public class MainActivity extends AppCompatActivity{
     FloatingActionButton botaoFlutuante;
     com.tarcisio.ruconnected.Menu menu = new com.tarcisio.ruconnected.Menu();
 
+    UsuarioDAO usuarios;
+    ComidaDAO comidas;
+    FeedBackDAO feedbacks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        usuarios = DatabaseClient.pegarInstancia(getApplicationContext()).usuarioDAO();
+        feedbacks = DatabaseClient.pegarInstancia(getApplicationContext()).feedBackDAO();
+        comidas = DatabaseClient.pegarInstancia(getApplicationContext()).comidaDAO();
+
         botaoFlutuante = (FloatingActionButton) findViewById(R.id.fabEntrar);
         botaoEntrar = (Button) findViewById(R.id.buttonEntrar);
+
+        Usuario usuario = new Usuario("075.099.323-51", "Tarcisio Neto", "chave", "neto1998", "TarcisioNeto98", "Rua da libertação-136");
+
+        Comida comida = new Comida("Muito deleciosa", "Batata Frita", "SSSS");
+        comidas.inserirComida(comida);
+
+        comida = comidas.pegarComida(comida.getNome());
+
+        usuarios.inserirUsuario(usuario);
+
+        Usuario user = usuarios.pegarUsuario(usuario.getNome(), usuario.getSenha());
+
+        FeedBack feedBack = new FeedBack("Muito ruim", "resdsa", comida.getId(), user.getId());
+
+        feedbacks.inserirFeedback(feedBack);
+
+        feedBack = feedbacks.pegarFeedback(feedBack.getDescricao());
+
+        Toast.makeText(getApplicationContext(), user.getId() + " " + user.getChave() + " " + comida.getNome() +
+                " Feedback: " + feedBack.getDescricao() + " " + feedBack.getIdComida() + feedBack.getIdUsuario(), Toast.LENGTH_SHORT).show();
 
         botaoEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +90,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
+
     }
 
     @Override

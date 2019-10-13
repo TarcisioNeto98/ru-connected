@@ -1,17 +1,18 @@
 package com.tarcisio.ruconnected.Model;
 
+import androidx.annotation.ColorRes;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "usuarios", foreignKeys	=	@ForeignKey(entity	=	Data.class,
-        parentColumns	=	"id",
-        childColumns	=	"id_data"))
+@Entity(tableName = "usuarios")
 public class Usuario {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+    @ColumnInfo
+    private String cpf;
     @ColumnInfo
     private String nome;
     @ColumnInfo
@@ -22,10 +23,11 @@ public class Usuario {
     private String login;
     @ColumnInfo
     private String endereco;
-    @ColumnInfo(name = "id_data")
+    @ColumnInfo
     private int data;//Chave estrangeira
 
-    public Usuario(String nome, String chave, String senha, String login, String endereco){
+    public Usuario(String cpf, String nome, String chave, String senha, String login, String endereco){
+        this.cpf = cpf;
         this.nome = nome;
         this.chave = chave;
         this.senha = senha;
@@ -39,6 +41,14 @@ public class Usuario {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getNome() {

@@ -16,7 +16,7 @@ public class Menu extends AppCompatActivity {
     }
 
     public Context getContexto() {
-        return contexto;
+        return this.contexto;
     }
 
     public void setContexto(Context contexto) {
