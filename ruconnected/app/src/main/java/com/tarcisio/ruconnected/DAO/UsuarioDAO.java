@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.tarcisio.ruconnected.Model.Usuario;
+/*import com.tarcisio.ruconnected.Model.Usuario;
 
 import java.util.List;
 
@@ -29,3 +29,4 @@ public interface UsuarioDAO {
     void deletarUsuario(Usuario usuario);
 
 }
+*/

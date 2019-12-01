@@ -1,5 +1,6 @@
 package com.tarcisio.ruconnected;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,15 +13,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.tarcisio.ruconnected.Banco_de_Dados.DatabaseClient;
-import com.tarcisio.ruconnected.DAO.ComidaDAO;
-import com.tarcisio.ruconnected.DAO.FeedBackDAO;
-import com.tarcisio.ruconnected.DAO.UsuarioDAO;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tarcisio.ruconnected.Model.Comida;
-import com.tarcisio.ruconnected.Model.FeedBack;
+import com.tarcisio.ruconnected.Cadastro;
 import com.tarcisio.ruconnected.Model.Usuario;
 
 public class MainActivity extends AppCompatActivity{
@@ -28,69 +31,80 @@ public class MainActivity extends AppCompatActivity{
     Button botaoEntrar;
     FloatingActionButton botaoFlutuante;
     com.tarcisio.ruconnected.Menu menu = new com.tarcisio.ruconnected.Menu();
+    EditText senha, login;
+    TextView textoCadastro;
 
-    UsuarioDAO usuarios;
+    /*UsuarioDAO usuarios;
     ComidaDAO comidas;
-    FeedBackDAO feedbacks;
+    FeedBackDAO feedbacks;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        usuarios = DatabaseClient.pegarInstancia(getApplicationContext()).usuarioDAO();
-        feedbacks = DatabaseClient.pegarInstancia(getApplicationContext()).feedBackDAO();
-        comidas = DatabaseClient.pegarInstancia(getApplicationContext()).comidaDAO();
+        textoCadastro = findViewById(R.id.tvCadastro);
 
-        botaoFlutuante = (FloatingActionButton) findViewById(R.id.fabEntrar);
-        botaoEntrar = (Button) findViewById(R.id.buttonEntrar);
+        botaoEntrar = findViewById(R.id.buttonEntrar);
+        FirebaseDatabase database//Crio um objeto que será meu banco de dados
+                = FirebaseDatabase. getInstance("https://ruconnected-1b6d7.firebaseio.com/");//Com o método estatico getInstance pego uma instancia
+                    //do meu banco passando sua URL
+        final DatabaseReference usuarios = database.getReference( "usuarios");//O método getReference me retorna uma tabela.
 
-        Usuario usuario = new Usuario("075.099.323-51", "Tarcisio Neto", "chave", "neto1998", "TarcisioNeto98", "Rua da libertação-136");
-
-        Comida comida = new Comida("Muito deleciosa", "Batata Frita", "SSSS");
-        comidas.inserirComida(comida);
-
-        comida = comidas.pegarComida(comida.getNome());
-
-        usuarios.inserirUsuario(usuario);
-
-        Usuario user = usuarios.pegarUsuario(usuario.getNome(), usuario.getSenha());
-
-        FeedBack feedBack = new FeedBack("Muito ruim", "resdsa", comida.getId(), user.getId());
-
-        feedbacks.inserirFeedback(feedBack);
-
-        feedBack = feedbacks.pegarFeedback(feedBack.getDescricao());
-
-        Toast.makeText(getApplicationContext(), user.getId() + " " + user.getChave() + " " + comida.getNome() +
-                " Feedback: " + feedBack.getDescricao() + " " + feedBack.getIdComida() + feedBack.getIdUsuario(), Toast.LENGTH_SHORT).show();
+        //usuarios.push().setValue(new Usuario(4315122, "Tarcisio Neto", "12345", "neto1232", "rua da"));
 
         botaoEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                EditText senha = (EditText) findViewById(R.id.etSenha);
+                senha = (EditText) findViewById(R.id.etSenha);
+                login = (EditText) findViewById(R.id.etLogin);
 
-                /*Intent i = new Intent();
-                i.setAction(Intent.ACTION_VIEW);
-                i.setClass(getApplicationContext(), Principal.class);
-                //i.setData(Uri.parse("https://www.google.com"));
-                startActivity(i);*/
+                usuarios.addListenerForSingleValueEvent( new ValueEventListener() {
+                    @Override
+                    public void onDataChange( @NonNull DataSnapshot dataSnapshot) {//dataSnapshot são todos os meus dados.
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();//Eu crio uma lista de DataSnapshot, através do método
+                        //getChildren().
+                        int i = 0;
+                        for(DataSnapshot data : children) {//Percorro essa lista
+                            String chave = data.getKey();
+                            Usuario usuario = data.getValue(Usuario.class);
+                            String password = senha.getText().toString(), l = login.getText().toString();
+                            if(password.equals(usuario.getSenha()) && l.equals(usuario.getEmail())){
 
-                Toast.makeText(getApplicationContext(), senha.getText()+"", Toast.LENGTH_SHORT).show();
+                                Intent intent = getIntent();
+
+                                if(usuario.getTipo() == 1) intent.setClass(getApplicationContext(), Principal.class);
+
+                                else intent.setClass(getApplicationContext(), FuncionarioActivity.class);
+
+                                intent.setAction(Intent.ACTION_SEND);
+                                intent.putExtra("usuario", usuario.getNome());
+                                i++;
+                                startActivity(intent);
+                                break;
+                            }
+                        }
+                        if(i == 0) Toast.makeText(getApplicationContext(), "Senha ou Login invalidos!", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onCancelled( @NonNull DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(), "eai", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
             }
         });
 
-        botaoFlutuante.setOnClickListener(new View.OnClickListener() {
+        textoCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), SobreNos.class);
-                i.setAction(Intent.ACTION_VIEW);
-                startActivity(i);
+                Intent intent2 = new Intent(getApplicationContext(), Cadastro.class);
+                intent2.setAction(Intent.ACTION_VIEW);
+                startActivity(intent2);
             }
         });
-
     }
 
     @Override
@@ -108,7 +122,7 @@ public class MainActivity extends AppCompatActivity{
         Intent i;
 
         if(id == R.id.itemInicial){
-            menu.setClasse(Principal.class);
+            menu.setClasse(FuncionarioActivity.class);
             i = menu.criarIntent();
             startActivity(i);
             /*try {

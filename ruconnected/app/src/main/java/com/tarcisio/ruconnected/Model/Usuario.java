@@ -1,54 +1,51 @@
 package com.tarcisio.ruconnected.Model;
 
-import androidx.annotation.ColorRes;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.PrimaryKey;
-
-@Entity(tableName = "usuarios")
+//@Entity(tableName = "usuarios")
 public class Usuario {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    @ColumnInfo
-    private String cpf;
-    @ColumnInfo
+    //@PrimaryKey(autoGenerate = true)
+    //private int id;
+    //@ColumnInfo
+    private int matricula;
+    //@ColumnInfo
     private String nome;
-    @ColumnInfo
-    private String chave;
-    @ColumnInfo
+    //@ColumnInfo
     private String senha;
-    @ColumnInfo
-    private String login;
-    @ColumnInfo
-    private String endereco;
-    @ColumnInfo
-    private int data;//Chave estrangeira
+    //@ColumnInfo
+    private String email;
 
-    public Usuario(String cpf, String nome, String chave, String senha, String login, String endereco){
-        this.cpf = cpf;
-        this.nome = nome;
-        this.chave = chave;
-        this.senha = senha;
-        this.endereco = endereco;
-        this.login = login;
+    private int tipo;
+
+    public Usuario(){//É nescessario um construtor vazio, caso contrario, dar FirebaseException.
+
     }
 
-    public int getId() {
+    public Usuario(int matricula, String nome, String senha, String email, int tipo){
+        this.matricula = matricula;
+        this.nome = nome;
+        this.senha = senha;
+        this.email = email;
+        this.tipo = tipo;
+    }
+
+    public void setMatricula(int matricula) {
+        this.matricula = matricula;
+    }
+
+    /*public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }*/
+
+    public int getMatricula() {
+        return matricula;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCpf(int matricula) {
+        this.matricula = matricula;
     }
 
     public String getNome() {
@@ -59,14 +56,6 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public String getChave() {
-        return chave;
-    }
-
-    public void setChave(String chave) {
-        this.chave = chave;
-    }
-
     public String getSenha() {
         return senha;
     }
@@ -75,27 +64,19 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public int getTipo() {
+        return tipo;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public int getData() {
-        return data;
-    }
-
-    public void setData(int data) {
-        this.data = data;
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 }

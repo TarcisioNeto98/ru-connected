@@ -1,4 +1,4 @@
-package com.tarcisio.ruconnected.Banco_de_Dados;
+/*package com.tarcisio.ruconnected.Banco_de_Dados;
 
 import android.content.Context;
 
@@ -16,4 +16,4 @@ public class DatabaseClient {
 
         return db;
     }
-}
+}*/

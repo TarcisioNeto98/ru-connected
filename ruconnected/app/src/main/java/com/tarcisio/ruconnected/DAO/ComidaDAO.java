@@ -1,4 +1,4 @@
-package com.tarcisio.ruconnected.DAO;
+/*package com.tarcisio.ruconnected.DAO;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -29,3 +29,4 @@ public interface ComidaDAO {
     void deletarComida(Comida comida);
 
 }
+*/

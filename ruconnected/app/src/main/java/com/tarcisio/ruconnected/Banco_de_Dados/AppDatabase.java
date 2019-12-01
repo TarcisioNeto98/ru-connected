@@ -1,4 +1,4 @@
-package com.tarcisio.ruconnected.Banco_de_Dados;
+/*package com.tarcisio.ruconnected.Banco_de_Dados;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
@@ -19,4 +19,4 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FeedBackDAO feedBackDAO();
 
-}
+}*/
