@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.037" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/etFeedback"
         android:layout_width="303dp"
         android:layout_height="137dp"
         android:layout_marginStart="8dp"
@@ -45,7 +45,6 @@
         android:layout_height="61dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-        android:drawableRight="@drawable/outline_arrow_forward_ios_black_18dp"
         android:text="Adicioanar Feedback"
         android:textAllCaps="false"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"

@@ -15,7 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MostrarCardapio"></activity>
+        <activity android:name=".AlterarCardapio"></activity>
+        <activity android:name=".BuscarCardapio" />
+        <activity android:name=".ExcluirCardapio" />
+        <activity android:name=".VisualizarFeedback" />
+        <activity android:name=".AdicionarCardapio" />
+        <activity android:name=".MostrarCardapio" />
         <activity android:name=".AlterarDados" />
         <activity android:name=".AdicioanarFeedBack" />
         <activity android:name=".AdicionarComida" />

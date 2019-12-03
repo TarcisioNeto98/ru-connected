@@ -1,5 +1,6 @@
 package com.tarcisio.ruconnected;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,14 +12,18 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tarcisio.ruconnected.Model.Usuario;
 
 public class Cadastro extends AppCompatActivity implements View.OnClickListener {
 
     EditText nome, email, matricula, senha, senhaRepetida;
     RadioGroup grupo;
+    String chave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
@@ -64,9 +69,34 @@ public class Cadastro extends AppCompatActivity implements View.OnClickListener 
                 Intent i;
                 if(tipo == 1) i = new Intent(getApplicationContext(), Principal.class);
                 else i = new Intent(getApplicationContext(), FuncionarioActivity.class);
-                i.setAction(Intent.ACTION_SEND);
-                i.putExtra("usuario", nome.getText().toString());
-                startActivity(i);
+
+                usuarios.addListenerForSingleValueEvent( new ValueEventListener() {
+                    @Override
+                    public void onDataChange( @NonNull DataSnapshot dataSnapshot) {//dataSnapshot são todos os meus dados.
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();//Eu crio uma lista de DataSnapshot, através do método
+                        //getChildren().
+                        for(DataSnapshot data : children) {//Percorro essa lista
+                            Usuario usuario = data.getValue(Usuario.class);
+                            String password = senha.getText().toString(), l = email.getText().toString();
+                            if(password.equals(usuario.getSenha()) && l.equals(usuario.getEmail())){
+                                chave = data.getKey();
+                                String []dados = new String[4];
+                                dados[0] = nome.getText().toString();
+                                dados[1] = matricula.getText().toString();
+                                dados[2] = email.getText().toString();
+                                dados[3] = chave;
+                                i.setAction(Intent.ACTION_SEND);
+                                i.putExtra("dados", dados);
+                                startActivity(i);
+                                break;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled( @NonNull DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(), "eai", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             else Toast.makeText(getApplicationContext(), "Redigite a senha corretamente.", Toast.LENGTH_SHORT).show();
         }

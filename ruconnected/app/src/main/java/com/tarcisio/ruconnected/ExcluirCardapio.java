@@ -3,7 +3,6 @@ package com.tarcisio.ruconnected;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,33 +15,30 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tarcisio.ruconnected.Model.Cardapio;
-import com.tarcisio.ruconnected.Model.Comida;
 
-public class CardapioActivity extends AppCompatActivity {
+public class ExcluirCardapio extends AppCompatActivity {
 
     Button acessarCardapio;
     RadioGroup radioGroup;
     RadioButton jantar, almoco;
     EditText datat;
     Cardapio cardapio = null;
-    int i = 0;
-    int tipo = 0;
+    int i = 0, tipo = 1;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cardapio);
+        setContentView(R.layout.activity_excluir_cardapio);
 
         ActionBar actionbar;
         actionbar = getSupportActionBar();
-        actionbar.setTitle("Acessar Cardápio");
+        actionbar.setTitle("Excluir Cardápio");
 
         radioGroup = findViewById(R.id.radioGroup);
         datat = findViewById(R.id.etData);
@@ -70,18 +66,14 @@ public class CardapioActivity extends AppCompatActivity {
 
                             for(DataSnapshot data : children) {//Percorro essa lista
                                 cardapio = data.getValue(Cardapio.class);
-                                Toast.makeText(getApplicationContext(), datat.getText().toString(), Toast.LENGTH_SHORT).show();
-                                if(datat.getText().toString().equals(cardapio.getData()) && tipo == cardapio.getTipo()) i = 1;
+                                String chave = data.getKey();
+                                if(datat.getText().toString().equals(cardapio.getData()) && tipo == cardapio.getTipo()){
+                                    i = 1;
+                                    cardapios.child(chave).removeValue();
+                                }
                             }
-                            if(i != 0){
-                                String []array = new String[2];
-                                array[0] = tipo+"";
-                                array[1] = datat.getText().toString();
-                                Intent intent = new Intent(getApplicationContext(), MostrarCardapio.class);
-                                intent.setAction(Intent.ACTION_SEND);
-                                intent.putExtra("dados", array);
-                                startActivity(intent);
-                            }
+
+                            if(i != 0) Toast.makeText(getApplicationContext(), "Cardápio Excluido!", Toast.LENGTH_SHORT).show();
                             else Toast.makeText(getApplicationContext(), "Cardapio não encontrado!", Toast.LENGTH_SHORT).show();
                         }
                         @Override
@@ -100,7 +92,7 @@ public class CardapioActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu){
         MenuInflater inflador = new MenuInflater(getApplicationContext());
-        inflador.inflate(R.menu.menu2, menu);
+        inflador.inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -110,17 +102,34 @@ public class CardapioActivity extends AppCompatActivity {
         int id = item.getItemId();
         Intent i = new Intent();
 
-        if(id == R.id.itemVisualizarCardapio){
-            i.setClass(getApplicationContext(), CardapioActivity.class);
+        if(id == R.id.itemExcluirCardapio){
+            i.setClass(getApplicationContext(), ExcluirCardapio.class);
             i.setAction(Intent.ACTION_VIEW);
-            startActivity(i);
+
+        }
+
+        else if(id == R.id.itemAddCardapio){
+            i.setClass(getApplicationContext(), AdicionarCardapio.class);
+            i.setAction(Intent.ACTION_VIEW);
+
+        }
+
+        else if(id == R.id.itemAlterarCardapio){
+            i.setClass(getApplicationContext(), BuscarCardapio.class);
+            i.setAction(Intent.ACTION_VIEW);
+        }
+
+        else if(id == R.id.VisualizarFeedback){
+            i.setClass(getApplicationContext(), VisualizarFeedback.class);
+            i.setAction(Intent.ACTION_VIEW);
         }
 
         else{
             i.setClass(getApplicationContext(), MainActivity.class);
             i.setAction(Intent.ACTION_VIEW);
-            startActivity(i);
         }
+
+        startActivity(i);
 
         return true;
     }

@@ -11,12 +11,28 @@ public class Comida {
     //private int id;
     //@ColumnInfo
     private String nome;
-    //@ColumnInfo
+    private String descricao;
     //@ColumnInfo
 
-    public Comida(String nome){
-        this.nome = nome;
+
+    public Comida(){
+
     }
+
+    public Comida(String nome, String descricao){
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+    //@ColumnInfo
+
 
     /*public int getId() {
         return id;

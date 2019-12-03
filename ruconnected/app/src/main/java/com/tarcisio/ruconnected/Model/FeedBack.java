@@ -14,7 +14,7 @@ public class FeedBack {
     //private int id;
     //@ColumnInfo
     private String descricao;
-    private int pontuacao;
+    private String data;
     //@ColumnInfo
     //private String chave;
     //@ColumnInfo(name = "id_comida")
@@ -22,9 +22,13 @@ public class FeedBack {
     //@ColumnInfo(name = "id_usuario")
     //private int idUsuario;
 
-    public FeedBack(String descricao, int pontuacao){
+    public FeedBack(){
+
+    }
+
+    public FeedBack(String descricao, String data){
         this.descricao = descricao;
-        this.pontuacao = pontuacao;
+        this.data = data;
         //this.chave = chave;
 
     }
@@ -37,11 +41,11 @@ public class FeedBack {
         this.descricao = descricao;
     }
 
-    public int getPontuacao() {
-        return pontuacao;
+    public String getData() {
+        return data;
     }
 
-    public void setPontuacao(int pontuacao) {
-        this.pontuacao = pontuacao;
+    public void setData(String data) {
+        this.data = data;
     }
 }

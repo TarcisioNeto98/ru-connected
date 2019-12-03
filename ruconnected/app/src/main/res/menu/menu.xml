@@ -2,9 +2,18 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/itemInicial"
-        android:title="Item" />
+        android:id="@+id/itemExcluirCardapio"
+        android:title="Excluir Cardápio" />
     <item
-        android:id="@+id/itemSobre"
-        android:title="Sobre nós" />
+        android:id="@+id/itemAddCardapio"
+        android:title="Adicionar Cardápio" />
+    <item
+        android:id="@+id/itemAlterarCardapio"
+        android:title="Alterar Cardápio" />
+    <item
+        android:id="@+id/VisualizarFeedback"
+        android:title="Visualizar Feedback" />
+    <item
+        android:id="@+id/itemSair"
+        android:title="Sair" />
 </menu>

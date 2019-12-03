@@ -1,6 +1,7 @@
 package com.tarcisio.ruconnected;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity{
     com.tarcisio.ruconnected.Menu menu = new com.tarcisio.ruconnected.Menu();
     EditText senha, login;
     TextView textoCadastro;
+    String chave; String []dados = new String[4];
 
     /*UsuarioDAO usuarios;
     ComidaDAO comidas;
@@ -42,6 +44,10 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActionBar actionbar;
+        actionbar = getSupportActionBar();
+        actionbar.setTitle("Login");
 
         textoCadastro = findViewById(R.id.tvCadastro);
 
@@ -67,11 +73,11 @@ public class MainActivity extends AppCompatActivity{
                         //getChildren().
                         int i = 0;
                         for(DataSnapshot data : children) {//Percorro essa lista
-                            String chave = data.getKey();
+                            chave = data.getKey();
                             Usuario usuario = data.getValue(Usuario.class);
                             String password = senha.getText().toString(), l = login.getText().toString();
                             if(password.equals(usuario.getSenha()) && l.equals(usuario.getEmail())){
-
+                                i++;
                                 Intent intent = getIntent();
 
                                 if(usuario.getTipo() == 1) intent.setClass(getApplicationContext(), Principal.class);
@@ -79,8 +85,11 @@ public class MainActivity extends AppCompatActivity{
                                 else intent.setClass(getApplicationContext(), FuncionarioActivity.class);
 
                                 intent.setAction(Intent.ACTION_SEND);
-                                intent.putExtra("usuario", usuario.getNome());
-                                i++;
+                                dados[0] = usuario.getNome();
+                                dados[1] = usuario.getMatricula()+"";
+                                dados[2] = usuario.getEmail();
+                                dados[3] = chave;
+                                intent.putExtra("dados", dados);
                                 startActivity(intent);
                                 break;
                             }
@@ -105,40 +114,5 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(intent2);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu){
-        MenuInflater inflador = new MenuInflater(getApplicationContext());
-        inflador.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-
-        int id = item.getItemId();
-        menu.setContexto(getApplicationContext());//o contexto só pode ser resgatado dentro dos métodos que são implementados da AppCompatActivity
-        Intent i;
-
-        if(id == R.id.itemInicial){
-            menu.setClasse(FuncionarioActivity.class);
-            i = menu.criarIntent();
-            startActivity(i);
-            /*try {
-                Intent i = menu.criarIntent();
-                startActivity(i);
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }*/
-        }
-
-        else{
-            menu.setClasse(SobreNos.class);
-            i = menu.criarIntent();
-            startActivity(i);
-        }
-
-        return true;
     }
 }

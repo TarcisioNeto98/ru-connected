@@ -8,16 +8,20 @@
 
     <Button
         android:id="@+id/buttonCadastrar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#F8BBD0"
-        android:text="Cadastrar"
+        android:layout_width="299dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+        android:text="Alterar Dados"
+        android:textAllCaps="false"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="14sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.868" />
+        app:layout_constraintVertical_bias="0.975" />
 
     <EditText
         android:id="@+id/editTextCNome"
